@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <div id="app">
+        <img v-bind:src="img" alt="">
+        <button v-on:click="onClickNext"> Next</button>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+
+
+    <script>
+    let app  = new Vue({
+        el: '#app',
+        data: {
+            socket: io('http://localhost:3000'),
+            img: ''
+        },
+        methods: {
+            onClickNext:function(){
+                this.socket.emit('next', this.img)
+               
+            }
+        },
+        mounted: function(){
+            this.socket.on('initiateImg', (data)=> {
+                this.img = data
+            })
+            this.socket.on('resNext',(data) => {
+                    this.img = data
+                })
+        }
+    })
+    </script>
+</body>
+</html>
